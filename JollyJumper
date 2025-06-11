@@ -5,22 +5,20 @@ import java.util.Set;
 public class JollyJumper {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        
+        System.out.println("Введите последовательность в формате: n a1 a2 a3 ... an");
+        System.out.println("Например: 4 1 4 2 3");
+        System.out.println("Для завершения введите пустую строку");
 
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine().trim();
             if (line.isEmpty()) {
-                break; // Завершаем, если строка пустая
+                break;
             }
 
             String[] parts = line.split("\\s+");
             int n = Integer.parseInt(parts[0]);
             int[] sequence = new int[n];
-
-            // Проверяем, что количество элементов соответствует n
-            if (parts.length - 1 != n) {
-                System.out.println("Not jolly"); // Некорректный ввод
-                continue;
-            }
 
             // Заполняем последовательность
             for (int i = 0; i < n; i++) {
@@ -28,31 +26,38 @@ public class JollyJumper {
             }
 
             if (n == 1) {
-                System.out.println("Jolly"); // Последовательность из одного числа
+                System.out.println("Jolly");
                 continue;
             }
 
             Set<Integer> diffs = new HashSet<>();
-            boolean isJolly = true;
+            boolean isValid = true;
 
-            // Вычисляем абсолютные разности
+            // Вычисляем абсолютные разности и проверяем, что они в [1, n-1]
             for (int i = 0; i < n - 1; i++) {
                 int diff = Math.abs(sequence[i] - sequence[i + 1]);
+                if (diff < 1 || diff > n - 1) {
+                    isValid = false;
+                    break;
+                }
                 diffs.add(diff);
             }
 
-            // Проверяем, что все разности от 1 до n-1 присутствуют
-            for (int i = 1; i <= n - 1; i++) {
-                if (!diffs.contains(i)) {
-                    isJolly = false;
-                    break;
+            // Проверяем, что все числа от 1 до n-1 присутствуют
+            if (isValid) {
+                for (int i = 1; i <= n - 1; i++) {
+                    if (!diffs.contains(i)) {
+                        isValid = false;
+                        break;
+                    }
                 }
             }
 
-            // Выводим результат
-            System.out.println(isJolly ? "Jolly" : "Not jolly");
+            System.out.println(isValid ? "Jolly" : "Not jolly");
+            System.out.println("\nВведите следующую последовательность или пустую строку для выхода");
         }
 
+        System.out.println("Программа завершена");
         scanner.close();
     }
 }
