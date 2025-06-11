@@ -1,0 +1,58 @@
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
+
+public class JollyJumper {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine().trim();
+            if (line.isEmpty()) {
+                break; // Завершаем, если строка пустая
+            }
+
+            String[] parts = line.split("\\s+");
+            int n = Integer.parseInt(parts[0]);
+            int[] sequence = new int[n];
+
+            // Проверяем, что количество элементов соответствует n
+            if (parts.length - 1 != n) {
+                System.out.println("Not jolly"); // Некорректный ввод
+                continue;
+            }
+
+            // Заполняем последовательность
+            for (int i = 0; i < n; i++) {
+                sequence[i] = Integer.parseInt(parts[i + 1]);
+            }
+
+            if (n == 1) {
+                System.out.println("Jolly"); // Последовательность из одного числа
+                continue;
+            }
+
+            Set<Integer> diffs = new HashSet<>();
+            boolean isJolly = true;
+
+            // Вычисляем абсолютные разности
+            for (int i = 0; i < n - 1; i++) {
+                int diff = Math.abs(sequence[i] - sequence[i + 1]);
+                diffs.add(diff);
+            }
+
+            // Проверяем, что все разности от 1 до n-1 присутствуют
+            for (int i = 1; i <= n - 1; i++) {
+                if (!diffs.contains(i)) {
+                    isJolly = false;
+                    break;
+                }
+            }
+
+            // Выводим результат
+            System.out.println(isJolly ? "Jolly" : "Not jolly");
+        }
+
+        scanner.close();
+    }
+}
